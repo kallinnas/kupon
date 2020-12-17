@@ -1,4 +1,4 @@
-package com.system.kupon.rest;
+package com.system.kupon.rest.controller;
 
 import com.system.kupon.entity.*;
 import com.system.kupon.service.UserService;

@@ -1,7 +1,6 @@
 package com.system.kupon.entity;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.Any;
 import org.hibernate.annotations.AnyMetaDef;
 import org.hibernate.annotations.MetaValue;
@@ -9,8 +8,9 @@ import org.hibernate.annotations.MetaValue;
 import javax.persistence.*;
 
 @Data
-@NoArgsConstructor
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "user")
 public class User {
 
