@@ -2,8 +2,7 @@ package com.system.kupon.rest;
 
 import com.system.kupon.entity.*;
 import com.system.kupon.repository.UserRepository;
-import com.system.kupon.service.CompanyService;
-import com.system.kupon.service.CustomerService;
+import com.system.kupon.service.*;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -30,7 +29,7 @@ public class UserSystem {
     }
 
     private ClientSession getCustomerSession(Client client) {
-        CustomerService service = context.getBean(CustomerService.class);
+        CustomerServiceImpl service = context.getBean(CustomerServiceImpl.class);
         service.setCustomerId(client.getId());
         ClientSession session = context.getBean(ClientSession.class);
         session.setRole(1);

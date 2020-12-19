@@ -7,12 +7,10 @@ import java.util.List;
 
 public interface CustomerService {
 
-    void setCustomerId(long id);
-
     Customer getById(long id);
 
     Customer update(Customer customer);
 
-    List<Coupon> getAllCouponsByCustomerId(long id);
+    List<Coupon> getAllCouponsByCustomerId();
 
 }

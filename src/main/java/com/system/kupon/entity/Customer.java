@@ -5,10 +5,10 @@ import javax.persistence.*;
 import java.util.List;
 
 @Data
-@AllArgsConstructor
+@Entity
+@RequiredArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@Entity
 @Table(name = "customer")
 public class Customer extends Client {
     private String firstName;
@@ -18,6 +18,7 @@ public class Customer extends Client {
     @JoinTable(name = "customer_coupon",
             joinColumns = @JoinColumn(name = "customer_id"),
             inverseJoinColumns = @JoinColumn(name = "coupon_id"))
+    @NonNull
     private List<Coupon> coupons;
 
     public Customer(long id) {

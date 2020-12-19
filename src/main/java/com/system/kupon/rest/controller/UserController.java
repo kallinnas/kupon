@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     private UserService userService;
 
-    @GetMapping("/users")
-    public ResponseEntity<Client> login(@RequestParam String email,
-                                        @RequestParam String password) {
-        User user = userService.getUserByEmailAndPassword(email, password);
-        if (user != null) return ResponseEntity.ok(user.getClient());
-        return ResponseEntity.noContent().build();
-    }
+//    @GetMapping("/users")
+//    public ResponseEntity<Client> login(@RequestParam String email,
+//                                        @RequestParam String password) {
+//        User user = userService.getUserByEmailAndPassword(email, password);
+//        if (user != null) return ResponseEntity.ok(user.getClient());
+//        return ResponseEntity.noContent().build();
+//    }
 }

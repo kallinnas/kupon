@@ -1,37 +1,56 @@
 package com.system.kupon.rest.controller;
 
-import com.system.kupon.entity.Coupon;
-import com.system.kupon.entity.Customer;
-import com.system.kupon.service.CustomerService;
-import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import com.system.kupon.entity.*;
+import com.system.kupon.rest.ClientSession;
+import lombok.*;
+import org.springframework.beans.factory.annotation.*;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
-@AllArgsConstructor(onConstructor = @__(@Autowired))
+@CrossOrigin
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+//- token isn't available through getSession() when @Autowired is active
 public class CustomerController {
-    private final CustomerService customerService;
 
-    @GetMapping("/customer/{id}")
-    public ResponseEntity<Customer> getCustomerById(@PathVariable long id) {
-        return customerService.getById(id).getId() == Customer.NO_ID ?
-                ResponseEntity.noContent().build() :
-                ResponseEntity.ok(customerService.getById(id));
+    @NonNull
+    @Qualifier("tokens")
+    private Map<String, ClientSession> tokensMap;
+
+    private ClientSession getSession(String token) {
+        return tokensMap.get(token);
     }
 
-    @GetMapping("/customer/{id}/coupons")
-    public ResponseEntity<List<Coupon>> getAllCustomerCoupons(@PathVariable long id) {
-        return customerService.getAllCouponsByCustomerId(id).isEmpty() ?
-                ResponseEntity.noContent().build() :
-                ResponseEntity.ok(customerService.getAllCouponsByCustomerId(id));
+//    @GetMapping("/customer/{id}")
+//    public ResponseEntity<Customer> getCustomerById(@PathVariable long id,
+//                                                    @PathVariable String token) {
+//        ClientSession session = getSession(token);
+//        if (session == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+//        Customer customer = session.getCustomerService().getById(id);
+//        return customer.getId() == Customer.NO_ID ?
+//                ResponseEntity.noContent().build() : ResponseEntity.ok(customer);
+//    }
+
+    @GetMapping("/customer/coupons")
+    public ResponseEntity<List<Coupon>> getAllCustomerCoupons(@RequestParam String token) {
+        ClientSession session = getSession(token);
+        if (session == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        List<Coupon> coupons = session.getCustomerService().getAllCouponsByCustomerId();
+        return ResponseEntity.ok(coupons);
     }
 
-    @PutMapping("/customer/update")
-    public ResponseEntity<Customer> updateCustomer(@RequestBody Customer customer) {
-        return ResponseEntity.ok(customerService.update(customer));
+    @PostMapping("/customer/{token}/update")
+    public ResponseEntity<Customer> updateCustomer(@PathVariable String token,
+                                                   @RequestBody Customer customer) {
+        ClientSession session = getSession(token);
+        if (session == null){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        Customer uCustomer = session.getCustomerService().update(customer);
+        return ResponseEntity.ok(uCustomer);
     }
 }
