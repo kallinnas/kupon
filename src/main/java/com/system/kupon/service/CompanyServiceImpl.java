@@ -12,12 +12,12 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class CompanyServiceImpl implements CompanyService {
 
-    private long company_id;
+    private long companyId;
     private final ApplicationContext context;
 
     @Override
     public void setCompanyId(long id) {
-        this.company_id = id;
+        this.companyId = id;
     }
 
 }

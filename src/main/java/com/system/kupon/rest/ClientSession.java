@@ -14,6 +14,7 @@ public class ClientSession {
     private long lastAccessedMillis;
     private CustomerService customerService;
     private CompanyService companyService;
+    private AdminService adminService;
 
     public void accessed() {
         this.lastAccessedMillis = System.currentTimeMillis();
