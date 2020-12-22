@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 @Service
-//@Transactional
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
 public class AdminServiceImpl implements AdminService {
     private UserRepository userRepository;

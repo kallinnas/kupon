@@ -6,8 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @CrossOrigin
 @RestController
@@ -24,9 +23,10 @@ public class LoginController {
 
     @PostMapping("/login")
     public ResponseEntity<Token> login(@RequestParam String email,
-                                       @RequestParam String password) {
+                                       @RequestParam String password)
+            throws UserSystem.InvalidLoginException {
         /* @RequestParam - using this @ arguments will be hidden and won't appear in URI */
-        ClientSession session = system.login(email, password);
+        ClientSession session = system.createClientSession(email, password);
         String token = new Token().generateToken();
         tokensMap.put(token, session);
         Token myToken = new Token();

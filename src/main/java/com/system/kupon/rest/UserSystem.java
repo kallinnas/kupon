@@ -16,7 +16,7 @@ public class UserSystem {
     private final ApplicationContext context;
     private final UserRepository userRepository;
 
-    public ClientSession login(String email, String password) {
+    public ClientSession createClientSession(String email, String password) throws InvalidLoginException {
         // ADMIN DATA
         String adminEmail = "admin";
         String adminPass = "777";
@@ -35,10 +35,7 @@ public class UserSystem {
             throw new InvalidLoginException("Invalid to login. Check email or password");
 
         Client client = optional.get().getClient();
-        if (client instanceof Customer) return getCustomerSession(client);
-        else if(client instanceof Company) return getCompanySession(client);
-        else throw new InvalidSessionTypeException("\nUnable to identify type like: %s for client session.\n" +
-                    "Stay on your place! The special forces were been sent to you.");
+        return client instanceof Customer ? getCustomerSession(client) : getCompanySession(client);
     }
 
     private ClientSession getCustomerSession(Client client) {
@@ -61,14 +58,8 @@ public class UserSystem {
         return session;
     }
 
-    private class InvalidLoginException extends RuntimeException {
+    public class InvalidLoginException extends RuntimeException {
         public InvalidLoginException(String msg) {
-            super(msg);
-        }
-    }
-
-    private class InvalidSessionTypeException extends RuntimeException {
-        public InvalidSessionTypeException(String msg) {
             super(msg);
         }
     }
