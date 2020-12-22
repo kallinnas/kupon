@@ -23,8 +23,7 @@ public class LoginController {
 
     @PostMapping("/login")
     public ResponseEntity<Token> login(@RequestParam String email,
-                                       @RequestParam String password)
-            throws UserSystem.InvalidLoginException {
+                                       @RequestParam String password) throws UserSystem.InvalidLoginException {
         /* @RequestParam - using this @ arguments will be hidden and won't appear in URI */
         ClientSession session = system.createClientSession(email, password);
         String token = new Token().generateToken();

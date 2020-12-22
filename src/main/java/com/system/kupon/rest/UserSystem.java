@@ -58,9 +58,10 @@ public class UserSystem {
         return session;
     }
 
-    public class InvalidLoginException extends RuntimeException {
-        public InvalidLoginException(String msg) {
+    public static class InvalidLoginException extends RuntimeException {
+        InvalidLoginException(String msg) {
             super(msg);
         }
     }
+
 }
