@@ -36,7 +36,7 @@ public class UserController {
 //    public ResponseEntity<Token> registration(@RequestParam String email,
 //                                              @RequestParam String password,
 //                                              @RequestParam int role) {
-    @PostMapping("/user/reg")
+    @PostMapping("/user/reg/{email}/{password}/{role}")
     public ResponseEntity<Token> registration(@PathVariable String email,
                                               @PathVariable String password,
                                               @PathVariable int role) {
