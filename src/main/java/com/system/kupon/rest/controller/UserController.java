@@ -32,7 +32,7 @@ public class UserController {
         return tokensMap.get(token);
     }
 
-    @PostMapping("/user/registration")
+    @PostMapping("/user/reg")
     public ResponseEntity<Token> registration(@RequestParam String email,
                                               @RequestParam String password,
                                               @RequestParam int role) {
