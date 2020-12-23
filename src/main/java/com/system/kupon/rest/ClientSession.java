@@ -11,10 +11,12 @@ import org.springframework.stereotype.Component;
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
 public class ClientSession {
     private int role;
+    private long userId;
     private long lastAccessedMillis;
-    private CustomerService customerService;
+    private CustomerServiceImpl customerService;
     private CompanyService companyService;
     private AdminService adminService;
+    private UserService userService;
 
     public void accessed() {
         this.lastAccessedMillis = System.currentTimeMillis();

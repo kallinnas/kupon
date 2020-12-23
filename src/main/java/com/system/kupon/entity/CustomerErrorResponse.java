@@ -1,4 +1,4 @@
-package com.system.kupon.config;
+package com.system.kupon.entity;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 

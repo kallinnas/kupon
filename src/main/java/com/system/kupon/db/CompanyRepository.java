@@ -1,4 +1,4 @@
-package com.system.kupon.repository;
+package com.system.kupon.db;
 
 import com.system.kupon.entity.Company;
 import org.springframework.data.jpa.repository.JpaRepository;

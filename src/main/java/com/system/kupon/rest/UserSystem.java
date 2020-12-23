@@ -1,20 +1,21 @@
 package com.system.kupon.rest;
 
 import com.system.kupon.entity.*;
-import com.system.kupon.repository.UserRepository;
+import com.system.kupon.db.UserRepository;
 import com.system.kupon.service.*;
-import lombok.AllArgsConstructor;
+import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-@AllArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @Service
 public class UserSystem {
     private final ApplicationContext context;
     private final UserRepository userRepository;
+    private final ClientSession session;
 
     public ClientSession createClientSession(String email, String password) throws InvalidLoginException {
         // ADMIN DATA
@@ -23,7 +24,6 @@ public class UserSystem {
 
         if (email.equals(adminEmail) && password.equals(adminPass)) {
             AdminService service = context.getBean(AdminService.class);
-            ClientSession session = context.getBean(ClientSession.class);
             session.setRole(3);
             session.setAdminService(service);
             session.accessed();
@@ -36,14 +36,15 @@ public class UserSystem {
 
         Client client = optional.get().getClient();
         return client instanceof Customer ? getCustomerSession(client) : getCompanySession(client);
+
     }
 
     private ClientSession getCustomerSession(Client client) {
         CustomerServiceImpl service = context.getBean(CustomerServiceImpl.class);
         service.setCustomerId(client.getId());
-        ClientSession session = context.getBean(ClientSession.class);
         session.setRole(1);
         session.setCustomerService(service);
+        session.setUserService(context.getBean(UserServiceImpl.class));
         session.accessed();
         return session;
     }
@@ -51,15 +52,15 @@ public class UserSystem {
     private ClientSession getCompanySession(Client client) {
         CompanyService service = context.getBean(CompanyService.class);
         service.setCompanyId(client.getId());
-        ClientSession session = context.getBean(ClientSession.class);
         session.setRole(2);
         session.setCompanyService(service);
+        session.setUserService(context.getBean(UserServiceImpl.class));
         session.accessed();
         return session;
     }
 
     public static class InvalidLoginException extends RuntimeException {
-        InvalidLoginException(String msg) {
+        public InvalidLoginException(String msg) {
             super(msg);
         }
     }

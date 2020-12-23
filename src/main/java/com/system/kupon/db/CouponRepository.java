@@ -1,4 +1,4 @@
-package com.system.kupon.repository;
+package com.system.kupon.db;
 
 import com.system.kupon.entity.Coupon;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,6 +18,7 @@ public interface CouponRepository extends JpaRepository<Coupon, Long> {
             "join company.coupons as coupon where company.id=:id")
     List<Coupon> findAllByCompanyId(long id);
 
-
     List<Coupon> findAllByTitle(String title);
+
+    Coupon findExistById(long id);
 }

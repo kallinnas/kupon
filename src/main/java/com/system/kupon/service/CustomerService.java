@@ -9,8 +9,10 @@ public interface CustomerService {
 
     Customer getById(long id);
 
-    Customer update(Customer customer);
+    List<Coupon> getAllCoupons();
 
     List<Coupon> getAllCouponsByCustomerId();
+
+    Coupon addCouponToCart(long id);
 
 }

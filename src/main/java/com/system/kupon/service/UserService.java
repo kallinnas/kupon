@@ -1,7 +1,12 @@
 package com.system.kupon.service;
 
-import com.system.kupon.entity.User;
+
+import com.system.kupon.rest.UserSystem;
 
 public interface UserService {
-    User getUserByEmailAndPassword(String email, String password);
+
+    void registerNewUser(String email, String password, int role) throws UserSystem.InvalidLoginException;
+    void updateEmail(String email, String updateEmail);
+    void updatePassword(String email, String password);
+
 }

@@ -1,6 +1,6 @@
 package com.system.kupon.rest;
 
-import com.system.kupon.config.CustomerErrorResponse;
+import com.system.kupon.entity.CustomerErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 

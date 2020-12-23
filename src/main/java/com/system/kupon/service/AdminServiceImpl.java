@@ -1,6 +1,6 @@
 package com.system.kupon.service;
 
-import com.system.kupon.repository.UserRepository;
+import com.system.kupon.db.UserRepository;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
