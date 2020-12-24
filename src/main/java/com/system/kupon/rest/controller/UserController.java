@@ -32,16 +32,12 @@ public class UserController {
         return tokensMap.get(token);
     }
 
-    //    @PostMapping("/user/reg")
-//    public ResponseEntity<Token> registration(@RequestParam String email,
-//                                              @RequestParam String password,
-//                                              @RequestParam int role) {
-    @PostMapping("/user/reg/{email}/{password}/{role}")
-    public ResponseEntity<Token> registration(@PathVariable String email,
-                                              @PathVariable String password,
-                                              @PathVariable int role) {
+    @PostMapping("/user/reg")
+    public ResponseEntity<Token> registration(@RequestParam String email,
+                                              @RequestParam String password,
+                                              @RequestParam int role) {
         context.getBean(UserService.class).registerNewUser(email, password, role);
-        return context.getBean(LoginController.class).login(email, password);
+        return context.getBean(LoginController.class).login(email, password); ////////////////!!!!!!!!!!!!!!!!!!!!
     }
 
     @PostMapping("/user/changeEmail")
