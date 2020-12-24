@@ -20,7 +20,9 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository repository;
-    private final ApplicationContext context;
+    //    private final ApplicationContext context;
+    private final CompanyRepository companyRepository;
+    private final CustomerRepository customerRepository;
 
     private User getCurrentUser(String email) {
         Optional<User> optional = repository.findByEmail(email);
@@ -36,8 +38,10 @@ public class UserServiceImpl implements UserService {
             throw new UserSystem.InvalidLoginException(String.format("USER WITH SUCH EMAIL %s ALREADY EXIST!", email));
         User user = new User(email, password, role);
         if (user.getClient() instanceof Customer) //Call one of repo to save it in User's client
-            this.context.getBean(CustomerRepository.class).save((Customer) user.getClient());
-        else this.context.getBean(CompanyRepository.class).save((Company) user.getClient());
+            customerRepository.save((Customer) user.getClient());
+        else companyRepository.save((Company) user.getClient());
+//        this.context.getBean(CustomerRepository.class).save((Customer) user.getClient());
+//        else this.context.getBean(CompanyRepository.class).save((Company) user.getClient());
         repository.save(user);
     }
 
