@@ -29,9 +29,7 @@ public class LoginController {
         ClientSession session = system.createClientSession(email, password);
         String token = generateToken();
         tokensMap.put(token, session);
-        Token myToken = new Token();
-        myToken.setToken(token);
-        return ResponseEntity.ok(myToken);
+        return ResponseEntity.ok(Token.builder().token(token).build());
     }
 
 }

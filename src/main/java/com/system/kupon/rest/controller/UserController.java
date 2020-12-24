@@ -3,6 +3,7 @@ package com.system.kupon.rest.controller;
 import com.system.kupon.db.CouponRepository;
 import com.system.kupon.entity.*;
 import com.system.kupon.rest.ClientSession;
+import com.system.kupon.rest.UserSystem;
 import com.system.kupon.service.CompanyService;
 import com.system.kupon.service.CustomerService;
 import com.system.kupon.service.UserService;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+
+import static com.system.kupon.entity.Token.generateToken;
 
 @RestController
 @RequestMapping("/api")
@@ -37,7 +40,10 @@ public class UserController {
                                               @RequestParam String password,
                                               @RequestParam int role) {
         context.getBean(UserService.class).registerNewUser(email, password, role);
-        return context.getBean(LoginController.class).login(email, password); ////////////////!!!!!!!!!!!!!!!!!!!!
+        ClientSession session = context.getBean(UserSystem.class).createClientSession(email, password);
+        String token = generateToken();
+        tokensMap.put(token, session);
+        return ResponseEntity.ok(Token.builder().token(token).build());
     }
 
     @PostMapping("/user/changeEmail")

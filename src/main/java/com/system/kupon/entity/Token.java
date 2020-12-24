@@ -1,10 +1,10 @@
 package com.system.kupon.entity;
 
-import lombok.Data;
-
+import lombok.*;
 import java.util.UUID;
 
 @Data
+@Builder
 public class Token {
     private String token = "";
     private static final int LENGTH_TOKEN = 15;
