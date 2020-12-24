@@ -48,8 +48,6 @@ public class CustomerController {
         return ResponseEntity.ok(String.format("Coupon %s was added to your cart successfully!", coupon.getTitle()));
     }
 
-
-
 //    @GetMapping("/customer/{id}")
 //    public ResponseEntity<Customer> getCustomerById(@PathVariable long id,
 //                                                    @PathVariable String token) {
