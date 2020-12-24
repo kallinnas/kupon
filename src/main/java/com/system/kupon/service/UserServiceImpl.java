@@ -29,6 +29,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void registerNewUser(String email, String password, int role) throws UserSystem.InvalidLoginException {
         Optional<User> optional = repository.findByEmail(email);
         if (optional.isPresent())
