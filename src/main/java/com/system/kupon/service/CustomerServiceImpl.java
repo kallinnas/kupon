@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-@Transactional
+//@Transactional
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class CustomerServiceImpl implements CustomerService {

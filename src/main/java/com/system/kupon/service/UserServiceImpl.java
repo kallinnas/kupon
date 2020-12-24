@@ -9,20 +9,16 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Service
-@Transactional
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class UserServiceImpl implements UserService {
 
     private final UserRepository repository;
-    //    private final ApplicationContext context;
-    private final CompanyRepository companyRepository;
-    private final CustomerRepository customerRepository;
+    private final ApplicationContext context;
 
     private User getCurrentUser(String email) {
         Optional<User> optional = repository.findByEmail(email);
@@ -31,17 +27,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public void registerNewUser(String email, String password, int role) throws UserSystem.InvalidLoginException {
         Optional<User> optional = repository.findByEmail(email);
         if (optional.isPresent())
             throw new UserSystem.InvalidLoginException(String.format("USER WITH SUCH EMAIL %s ALREADY EXIST!", email));
         User user = new User(email, password, role);
         if (user.getClient() instanceof Customer) //Call one of repo to save it in User's client
-            customerRepository.save((Customer) user.getClient());
-        else companyRepository.save((Company) user.getClient());
-//        this.context.getBean(CustomerRepository.class).save((Customer) user.getClient());
-//        else this.context.getBean(CompanyRepository.class).save((Company) user.getClient());
+            this.context.getBean(CustomerRepository.class).save((Customer) user.getClient());
+        else this.context.getBean(CompanyRepository.class).save((Company) user.getClient());
         repository.save(user);
     }
 

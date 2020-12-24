@@ -13,7 +13,7 @@ import static com.system.kupon.entity.Token.generateToken;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+//@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class LoginController {
 
