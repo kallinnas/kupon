@@ -1,7 +1,6 @@
 package com.system.kupon.rest;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.*;
 import org.springframework.web.servlet.config.annotation.*;
 
 import java.util.HashMap;

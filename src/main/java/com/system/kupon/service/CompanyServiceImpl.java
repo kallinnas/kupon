@@ -8,10 +8,12 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class CompanyServiceImpl implements CompanyService {
