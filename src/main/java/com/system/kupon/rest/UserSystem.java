@@ -2,6 +2,7 @@ package com.system.kupon.rest;
 
 import com.system.kupon.entity.*;
 import com.system.kupon.db.UserRepository;
+import com.system.kupon.ex.InvalidLoginException;
 import com.system.kupon.service.*;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class UserSystem {
 
         Optional<User> optional = userRepository.findByEmailAndPassword(email, password);
         if (!optional.isPresent())
-            throw new InvalidLoginException("Invalid to login. Check email or password");
+            throw new InvalidLoginException("Invalid to login. Check carefully your email address and password.");
 
         Client client = optional.get().getClient();
         return client instanceof Customer ? getCustomerSession(client) : getCompanySession(client);
@@ -57,12 +58,6 @@ public class UserSystem {
         session.setUserService(context.getBean(UserServiceImpl.class));
         session.accessed();
         return session;
-    }
-
-    public static class InvalidLoginException extends RuntimeException {
-        public InvalidLoginException(String msg) {
-            super(msg);
-        }
     }
 
 }

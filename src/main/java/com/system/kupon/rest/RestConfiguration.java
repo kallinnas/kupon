@@ -1,5 +1,6 @@
 package com.system.kupon.rest;
 
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.*;
 import org.springframework.web.servlet.config.annotation.*;
 
@@ -10,6 +11,7 @@ import java.util.Map;
 public class RestConfiguration {
 
     @Bean(name = "tokens")
+//    @Scope(BeanDefinition.SCOPE_SINGLETON) - by default
     public Map<String, ClientSession> tokensMap() {
         return new HashMap<>();
     }
@@ -19,8 +21,8 @@ public class RestConfiguration {
 //        return new WebMvcConfigurerAdapter() {
 //            @Override
 //            public void addCorsMappings(CorsRegistry registry) {
-//                registry.addMapping("/**").allowedMethods("GET", "POST", "PUT", "DELETE").allowedOrigins("*")
-//                        .allowedHeaders("*");
+//                registry.addMapping("/**").allowedMethods("GET", "POST", "PUT", "DELETE").allowedOrigins("localhost:")
+//                        .allowedHeaders("*").allowCredentials(true);
 //            }
 //        };
 //    }

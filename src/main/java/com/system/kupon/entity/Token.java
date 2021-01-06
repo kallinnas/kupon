@@ -10,6 +10,9 @@ public class Token {
     private static final int LENGTH_TOKEN = 15;
 
     public static String generateToken() {
-        return UUID.randomUUID().toString().replaceAll("-", "").substring(0, Token.LENGTH_TOKEN);
+        return UUID.randomUUID()
+                .toString()
+                .replaceAll("-", "")
+                .substring(0, Token.LENGTH_TOKEN);
     }
 }

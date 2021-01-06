@@ -2,6 +2,7 @@ package com.system.kupon.service;
 
 import com.system.kupon.entity.*;
 import com.system.kupon.db.*;
+import com.system.kupon.ex.CouponNotInStockException;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -46,6 +47,10 @@ public class CustomerServiceImpl implements CustomerService {
     public Coupon addCouponToCart(long id) {
         Customer customer = getExistCustomer();
         Coupon coupon = couponRepository.findExistById(id);
+        int amount = coupon.getAmount();
+        if (amount <= 0) {
+            throw new CouponNotInStockException("Amount of coupons approached zero. Coupons are not in the stock.");
+        }
         customer.getCart().add(coupon);
         customerRepository.save(customer);
         return coupon;

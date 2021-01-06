@@ -1,6 +1,7 @@
 package com.system.kupon.rest.controller;
 
 import com.system.kupon.entity.Token;
+import com.system.kupon.ex.InvalidLoginException;
 import com.system.kupon.rest.*;
 import lombok.*;
 import org.springframework.http.ResponseEntity;
@@ -23,10 +24,9 @@ public class LoginController {
     @NonNull
     private UserSystem system;
 
-
     @PostMapping("/login")
     public ResponseEntity<Token> login(@RequestParam String email,
-                                       @RequestParam String password) throws UserSystem.InvalidLoginException {
+                                       @RequestParam String password) throws InvalidLoginException {
         ClientSession session = system.createClientSession(email, password);
         String token = generateToken();
         tokensMap.put(token, session);

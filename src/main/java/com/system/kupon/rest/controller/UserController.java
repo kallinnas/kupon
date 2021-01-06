@@ -36,10 +36,11 @@ public class UserController {
         return tokensMap.get(token);
     }
 
+
     @PostMapping("/user/reg")
-    public ResponseEntity<Token> registration(@RequestParam String email,
-                                              @RequestParam String password,
-                                              @RequestParam int role) {
+    public ResponseEntity<Token> registration(@RequestHeader String email,
+                                              @RequestHeader String password,
+                                              @RequestHeader int role) {
         context.getBean(UserService.class).registerNewUser(email, password, role);
         ClientSession session = context.getBean(UserSystem.class).createClientSession(email, password);
         String token = generateToken();
