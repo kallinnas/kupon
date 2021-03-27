@@ -1,10 +1,15 @@
 package com.system.kupon.rest;
 
 import com.system.kupon.ex.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.http.*;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 
@@ -12,13 +17,28 @@ import java.time.LocalDateTime;
 public class ExceptionControllerAdvice {
 
     @ExceptionHandler
-    public ResponseEntity<ErrorResponse> handle(AbstractAuthenticationException ex) {
+    public ResponseEntity<ErrorResponse> handle(UserAlreadyExistException ex) {
         return response(ex.getMessage(), HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler
     public ResponseEntity<ErrorResponse> handle(CouponNotInStockException ex) {
         return response(ex.getMessage(), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> handle(NoSuchCouponException ex) {
+        return response(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> handle(NoSuchCustomerException ex) {
+        return response(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> handle(UserIsNotExistException ex) {
+        return response(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     private ResponseEntity<ErrorResponse> response(String message, HttpStatus status) {
@@ -28,7 +48,7 @@ public class ExceptionControllerAdvice {
 
     @Getter
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-    @RequiredArgsConstructor // Generates constructor for every final or @NonNull field
+    @RequiredArgsConstructor
     private static class ErrorResponse {
         String message;
         LocalDateTime timestamp;

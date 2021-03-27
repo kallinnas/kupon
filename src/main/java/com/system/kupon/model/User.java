@@ -1,11 +1,18 @@
-package com.system.kupon.entity;
+package com.system.kupon.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Any;
 import org.hibernate.annotations.AnyMetaDef;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.MetaValue;
+import org.hibernate.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Data
 @Entity
@@ -27,6 +34,7 @@ public class User {
                     @MetaValue(value = "2", targetEntity = Company.class),
             })
     @JoinColumn(name = "client_id")
+    @Cascade(CascadeType.ALL)
     private Client client;
 
     public User(String email, String password, int role) {

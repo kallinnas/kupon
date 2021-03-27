@@ -1,6 +1,9 @@
 package com.system.kupon.rest;
 
-import com.system.kupon.service.*;
+import com.system.kupon.service.AdminService;
+import com.system.kupon.service.CompanyService;
+import com.system.kupon.service.CustomerServiceImpl;
+import com.system.kupon.service.UserService;
 import lombok.Data;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;

@@ -1,6 +1,8 @@
-package com.system.kupon.entity;
+package com.system.kupon.model;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
+
 import java.util.UUID;
 
 @Data

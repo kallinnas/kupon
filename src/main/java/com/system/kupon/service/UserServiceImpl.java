@@ -1,9 +1,15 @@
 package com.system.kupon.service;
 
-import com.system.kupon.db.*;
-import com.system.kupon.entity.*;
+import com.system.kupon.db.CompanyRepository;
+import com.system.kupon.db.CouponRepository;
+import com.system.kupon.db.CustomerRepository;
+import com.system.kupon.db.UserRepository;
+import com.system.kupon.model.Company;
+import com.system.kupon.model.Coupon;
+import com.system.kupon.model.Customer;
+import com.system.kupon.model.User;
 import com.system.kupon.ex.*;
-import lombok.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.ApplicationContext;
@@ -22,12 +28,13 @@ public class UserServiceImpl implements UserService {
 
     private User getCurrentUser(String email) {
         Optional<User> optional = repository.findByEmail(email);
-        if (!optional.isPresent()) throw new InvalidLoginException("NEVER HAPPENS IN USER-SERVICE-IMPL!!!");////////////?????????????????
+        if (optional.isEmpty())
+            throw new InvalidLoginException("NEVER HAPPENS IN USER-SERVICE-IMPL!!!");/////////?????????
         return optional.get();
     }
 
     @Override
-    public void registerNewUser(String email, String password, int role) throws AbstractAuthenticationException {
+    public void registerNewUser(String email, String password, int role) throws UserAlreadyExistException {
         Optional<User> optional = repository.findByEmail(email);
         if (optional.isPresent())
             throw new UserAlreadyExistException(String.format("USER WITH SUCH EMAIL %s ALREADY EXIST!", email));
@@ -52,5 +59,10 @@ public class UserServiceImpl implements UserService {
         repository.save(user);
     }
 
+    /* COUPON */
+    @Override
+    public Coupon getCouponById(long id) {
+        return context.getBean(CouponRepository.class).findExistById(id);
+    }
 
 }

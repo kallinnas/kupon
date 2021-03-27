@@ -1,18 +1,20 @@
 package com.system.kupon.rest;
 
-import com.system.kupon.entity.*;
 import com.system.kupon.db.UserRepository;
+import com.system.kupon.model.Client;
+import com.system.kupon.model.Customer;
+import com.system.kupon.model.User;
 import com.system.kupon.ex.InvalidLoginException;
 import com.system.kupon.service.*;
-import lombok.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @Service
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class UserSystem {
     private final ApplicationContext context;
     private final UserRepository userRepository;
@@ -32,7 +34,7 @@ public class UserSystem {
         }
 
         Optional<User> optional = userRepository.findByEmailAndPassword(email, password);
-        if (!optional.isPresent())
+        if (optional.isEmpty())
             throw new InvalidLoginException("Invalid to login. Check carefully your email address and password.");
 
         Client client = optional.get().getClient();
@@ -51,7 +53,7 @@ public class UserSystem {
     }
 
     private ClientSession getCompanySession(Client client) {
-        CompanyService service = context.getBean(CompanyService.class);
+        CompanyServiceImpl service = context.getBean(CompanyServiceImpl.class);
         service.setCompanyId(client.getId());
         session.setRole(2);
         session.setCompanyService(service);

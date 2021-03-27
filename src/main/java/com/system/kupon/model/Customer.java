@@ -1,13 +1,15 @@
-package com.system.kupon.entity;
+package com.system.kupon.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "customer")
@@ -20,6 +22,7 @@ public class Customer extends Client {
             joinColumns = @JoinColumn(name = "customer_id"),
             inverseJoinColumns = @JoinColumn(name = "coupon_id"))
     private List<Coupon> cart = new ArrayList<>();
+
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "customer_coupon",
@@ -35,4 +38,8 @@ public class Customer extends Client {
         return new Customer(NO_ID);
     }
 
+    public void addCoupon(Coupon coupon) {
+        coupons.add(coupon);
+        coupon.addCustomer(this);
+    }
 }
