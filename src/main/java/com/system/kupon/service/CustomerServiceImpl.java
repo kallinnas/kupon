@@ -30,7 +30,6 @@ public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
     private final CouponRepository couponRepository;
     private final ApplicationContext context;
-    private final UserRepository userRepository;
 
     /* CUSTOMER */
     @Override
@@ -111,10 +110,6 @@ public class CustomerServiceImpl implements CustomerService {
         customerRepository.save(customer);
     }
 
-    public void deleteCustomerTest(long userId) {
-        userRepository.deleteById(userId);
-    }
-
     @Override
     public void deleteCustomer(long id) {
         Customer customer = getExistCustomer();
@@ -136,41 +131,7 @@ public class CustomerServiceImpl implements CustomerService {
 
 
 
-
-//        userRepository.deleteUserByClient(customer);
-//        userRepository.deleteById(id);
-//        customerRepository.deleteById(id);
-//        for (User user : userRepository.findAll()) {
-//            if (user.getClient().equals(customer)){
-//                userRepository.delete(user);
-//            }
-//        }
-
-//        for (User user : userRepository.findAll()) {
-//            if (user.getClient().getId() == id)
-//                if (user.getClient() instanceof Customer)
-//                    userRepository.delete(user);
-//        }
     }
-
-//    @Override
-//    public Coupon releaseCoupon(long coupon_id) throws NoSuchCouponException {
-//        Coupon coupon = getCoupon(coupon_id);
-//        List<Coupon> coupons = couponRepo.findAllByCustomerId(customerId);
-//        Optional<Customer> optCustomer = customerRepo.findById(customerId);
-//        if (coupons.contains(coupon) && optCustomer.isPresent()) {
-//            Customer customer = optCustomer.get();
-//            coupon.getCustomers().remove(customer); //delete customer from customer's list of specified coupon
-//            couponRepo.save(coupon);
-//            coupons.remove(getCoupon(coupon_id)); //delete coupon from list coupons that belongs to customer
-//            customer.setCoupons(coupons);
-//            customerRepo.save(customer);
-//            System.out.println("Coupon was released successfully!");
-//            return coupon;
-//        }
-//        String message = "No such coupon to release.";
-//        throw new NoSuchCouponException(message);
-//    }
 
 
     /* COMPANY */
@@ -185,10 +146,6 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
 
-//    @Override
-//    public List<Company> getAllCompanies() {
-//        return context.getBean(CompanyRepository.class).findAll();
-//    }
 
 
 }

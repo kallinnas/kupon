@@ -57,13 +57,6 @@ public class CustomerController {
         service.deleteCustomer(id);
     }
 
-    @DeleteMapping("customer/{token}/deleteTest/{id}")
-    public void deleteTest(@PathVariable String token, @PathVariable long id) {
-        ClientSession session = getSession(token);
-        CustomerService service = session.getCustomerService();
-        service.deleteCustomerTest(id);
-    }
-
     /* COUPON */
     @GetMapping("customer/{token}/get/{id}")
     public ResponseEntity<Coupon> getCoupon(@PathVariable String token,

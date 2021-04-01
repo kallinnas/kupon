@@ -5,7 +5,7 @@ import com.system.kupon.model.Coupon;
 import com.system.kupon.model.Customer;
 import com.system.kupon.ex.NoSuchCouponException;
 import com.system.kupon.ex.NoSuchCustomerException;
-import com.system.kupon.ex.UserIsNotExistException;
+import com.system.kupon.model.User;
 import com.system.kupon.rest.ClientSession;
 import com.system.kupon.service.AdminService;
 import lombok.AllArgsConstructor;
@@ -34,15 +34,11 @@ public class AdminController {
     }
 
     // COUPON
-    @GetMapping("admin/{token}/getAllCoupons")
-    public ResponseEntity<List<Coupon>> getAllCoupons(@PathVariable String token) {
+    @PutMapping("admin/coupons")
+    public ResponseEntity<List<Coupon>> getAllCoupons(@RequestHeader String token) {
         ClientSession session = getSession(token);
-        if (session == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-        AdminService service = session.getAdminService();
-        List<Coupon> coupons = service.getAllCoupons();
-        return ResponseEntity.ok(coupons);
+        if (session == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        return ResponseEntity.ok(session.getAdminService().getAllCoupons());
     }
 
     @GetMapping("admin/{token}/getCoupon/{id}")
@@ -67,12 +63,12 @@ public class AdminController {
         return ResponseEntity.ok(service.updateCoupon(coupon));
     }
 
-    @DeleteMapping("admin/{token}/deleteCoupon/{id}")
-    public String deleteCoupon(@PathVariable String token,
-                               @PathVariable long id) {
+    @DeleteMapping("admin/deleteCoupon/{id}")
+    public List<Coupon> deleteCoupon(@RequestHeader String token,
+                                     @PathVariable long id) {
         ClientSession session = getSession(token);
         AdminService service = session.getAdminService();
-        return service.deleteCoupon(id);
+        return service.deleteCouponById(id);
     }
 
     // CUSTOMER
@@ -140,15 +136,11 @@ public class AdminController {
     }
 
     /* COMPANY */
-    @GetMapping("admin/{token}/companies")
-    public ResponseEntity<List<Company>> getAllCompanies(@PathVariable String token) {
+    @PutMapping("admin/companies")
+    public ResponseEntity<List<Company>> getAllCompanies(@RequestHeader String token) {
         ClientSession session = getSession(token);
-        if (session == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-        AdminService service = session.getAdminService();
-        List<Company> companies = service.getAllCompanies();
-        return ResponseEntity.ok(companies);
+        if (session == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        return ResponseEntity.ok(session.getAdminService().getAllCompanies());
     }
 
     @GetMapping("admin/{token}/getCompanyById/{company_id}")
@@ -186,18 +178,19 @@ public class AdminController {
         return ResponseEntity.ok(company);
     }
 
-    @DeleteMapping("admin/{token}/deleteCompanyById/{id}")
-    public ResponseEntity<String> deleteCompanyById(@PathVariable String token,
-                                                    @PathVariable long id) throws UserIsNotExistException {
+    @DeleteMapping("admin/deleteCompanyById/{id}")
+    public ResponseEntity<List<Company>> deleteCompanyById(@RequestHeader String token,
+                                                           @PathVariable long id) {
         ClientSession session = getSession(token);
-        if (session == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-        AdminService service = session.getAdminService();
-        service.deleteCompanyById(id);
-        String ok = "Company was deleted successfully!";
-        return ResponseEntity.ok(ok);
+        if (session == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        return ResponseEntity.ok(session.getAdminService().deleteCompanyById(id));
     }
 
-
+    /* USER */
+    @PutMapping("admin/users")
+    public ResponseEntity<List<User>> getAllCompanyUsers(@RequestHeader String token) {
+        ClientSession session = getSession(token);
+        if (session == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        return ResponseEntity.ok(session.getAdminService().getAllCompanyUsers());
+    }
 }

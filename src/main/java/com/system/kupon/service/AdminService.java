@@ -14,7 +14,7 @@ public interface AdminService {
 
     Coupon updateCoupon(Coupon coupon) throws NoSuchCouponException;
 
-    String deleteCoupon(long id);
+    List<Coupon> deleteCouponById(long id);
 
     /* Customer */
     Customer getCustomerById(long id);
@@ -38,7 +38,9 @@ public interface AdminService {
 
     void updateCompany(Company company);
 
-    void deleteCompanyById(long id) throws UserIsNotExistException;
+    List<Company> deleteCompanyById(long id);
 
     Coupon getCouponById(long id);
+
+    List<User> getAllCompanyUsers();
 }

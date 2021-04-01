@@ -74,8 +74,6 @@ public class CompanyServiceImpl implements CompanyService {
         return String.format("%s your password was successfully updated!", getCompany().getName());
     }
 
-
-
     @Override
     public Boolean confirmPassword(String password) {
         return context.getBean(UserRepository.class).findByPassword(password).isPresent() &&

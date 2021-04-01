@@ -10,12 +10,10 @@ import java.util.List;
 @Repository
 public interface CouponRepository extends JpaRepository<Coupon, Long> {
 
-    @Query("select coupon from Customer as customer " +
-            "join customer.coupons as coupon where customer.id=:id")
+    @Query("select coupon from Customer as customer join customer.coupons as coupon where customer.id=:id")
     List<Coupon> findAllByCustomerId(long id);
 
-    @Query("select coupon from Company as company " +
-            "join company.coupons as coupon where company.id=:id")
+    @Query("select coupon from Company as company join company.coupons as coupon where company.id=:id")
     List<Coupon> findAllByCompanyId(long id);
 
     List<Coupon> findAllByTitle(String title);

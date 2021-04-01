@@ -9,16 +9,16 @@ import com.system.kupon.model.Coupon;
 import com.system.kupon.model.Customer;
 import com.system.kupon.model.User;
 import com.system.kupon.ex.NoSuchCustomerException;
-import com.system.kupon.ex.UserIsNotExistException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 //@Transactional
@@ -27,6 +27,7 @@ import java.util.Optional;
 public class AdminServiceImpl implements AdminService {
 
     private final ApplicationContext context;
+    private final UserRepository userRepository;
     private final CouponRepository couponRepository;
     private final CustomerRepository customerRepository;
     private final CompanyRepository companyRepository;
@@ -48,15 +49,24 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public String deleteCoupon(long id) {
+    public List<Coupon> deleteCouponById(long id) {
         Coupon coupon = couponRepository.findExistById(id);
-        for (Customer customer : customerRepository.findAll()) {
+        /* Remove coupon from customers by couponId */
+        for (Customer customer : customerRepository.findAllByCouponIdInCustomerCoupons(id)) {
             customer.getCoupons().remove(coupon);
+            customerRepository.save(customer);
         }
+        for (Customer customer : customerRepository.findAllByCouponIdInCustomerCart(id)) {
+            customer.getCart().remove(coupon);
+            customerRepository.save(customer);
+        }
+        /* Remove coupon from company */
         Company company = coupon.getCompany();
         company.getCoupons().remove(coupon);
+        companyRepository.save(company);
+        /* Remove coupon from repository */
         couponRepository.deleteById(id);
-        return "Coupon id# " + id + "was deleted successfully!";
+        return couponRepository.findAll();
     }
 
     /* CUSTOMER */
@@ -160,13 +170,41 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public void deleteCompanyById(long id) throws UserIsNotExistException {
-        Optional<Company> company = companyRepository.findById(id);
-        if (company.isEmpty()) {
-            throw new UserIsNotExistException(String.format("Can't delete company with such id#%d", id));
-        }
+    @Transactional
+    public List<Company> deleteCompanyById(long id) {
+        removeCouponFromCustomerByCompanyId(id);
+        couponRepository.findAllByCompanyId(id).forEach(couponRepository::delete);
+//        User user = userRepository.findAll().stream()
+//                .filter(u -> u.getClient().getId() == id)
+//                .findFirst().get();
+//        userRepository.delete(user);
+
+        userRepository.findAll()
+                .removeIf(u -> u.getClient().getId() == id);
+
         companyRepository.deleteById(id);
+        return companyRepository.findAll();
     }
 
+    private void removeCouponFromCustomerByCompanyId(long id) {
+        /* Remove coupons from customers coupons */
+        for (Customer customer : customerRepository.findByCompanyIdInCoupons(id)) {
+            customer.getCoupons().removeIf(coupon -> coupon.getCompany().getId() == id);
+            customerRepository.save(customer);
+        }
 
+        /* Remove coupons from customers cart */
+        for (Customer customer : customerRepository.findByCompanyIdInCart(id)) {
+            customer.getCart().removeIf(coupon -> coupon.getCompany().getId() == id);
+            customerRepository.save(customer);
+        }
+    }
+
+    /* USER */
+    @Override
+    public List<User> getAllCompanyUsers() {
+        UserRepository repository = context.getBean(UserRepository.class);
+        return repository.findAll().stream()
+                .filter(user -> user.getClient() instanceof Company).collect(Collectors.toList());
+    }
 }
